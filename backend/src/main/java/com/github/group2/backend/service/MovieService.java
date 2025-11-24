@@ -19,7 +19,6 @@ public class MovieService {
                 .findAll()
                 .stream()
                 .map(movie -> new MovieDTO(
-                        movie.getId(),
                         movie.getTitle(),
                         movie.getGenre()
                 ))
