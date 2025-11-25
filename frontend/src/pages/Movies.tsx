@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { getMovies, type MovieDTO } from "../api/movies.ts";
 import MovieCard from "../components/MovieCard.tsx";
+import {useNavigate} from "react-router-dom";
 
 export default function Movies() {
     const [movies, setMovies] = useState<MovieDTO[]>([]);
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -12,6 +14,11 @@ export default function Movies() {
             .finally(() => setLoading(false));
     }, []);
 
+
+    function handleMovieClick(publicId:string) {
+        navigate(`/movies/${publicId}`);
+    }
+  
     if (loading) {
         return (
             <div style={{ padding: 20, textAlign: "center" }}>
@@ -29,6 +36,8 @@ export default function Movies() {
             <div className="movies-grid">
                 {movies.map((m) => (
                     <MovieCard
+                       onClick={() => handleMovieClick(m.publicId)}
+                      publicId={m.publicId}
                         key={m.id}
                         title={m.title}
                         genre={m.genre}
