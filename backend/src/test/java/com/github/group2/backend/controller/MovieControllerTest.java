@@ -11,7 +11,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -45,6 +47,16 @@ class MovieControllerTest {
                                 """
                 ));
 
+    }
+
+    @Test
+    void deleteMovie_shouldDeleteMovie() throws Exception {
+        String publicId = "abc123";
+
+        mockMvc.perform(delete("/api/movies/{publicId}", publicId))
+                .andExpect(status().isNoContent());
+
+        verify(movieService).deleteMovie(publicId);
     }
 
 }

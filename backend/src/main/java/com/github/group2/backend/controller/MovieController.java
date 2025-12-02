@@ -3,6 +3,7 @@ package com.github.group2.backend.controller;
 import com.github.group2.backend.dto.MovieDTO;
 import com.github.group2.backend.entity.Movie;
 import com.github.group2.backend.service.MovieService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,6 +34,7 @@ public class MovieController {
     }
 
     @DeleteMapping("/{publicId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteMovie(@PathVariable String publicId) {
         movieService.deleteMovie(publicId);
     }
