@@ -40,7 +40,8 @@ public class MovieController {
     }
 
     @PostMapping("/{publicId}")
-    public Movie updateMovie(@RequestBody MovieDTO movieDTO) {
+    public Movie updateMovie(@PathVariable String publicId, @RequestBody MovieDTO movieDTO) {
         return null;
     }
+
 }
