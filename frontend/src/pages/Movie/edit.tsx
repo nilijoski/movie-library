@@ -25,7 +25,7 @@ export default function EditMovie() {
         if (!movie || !id) {
             return;
         }
-        editMovie(movie).then(() => navigate("/movies"));
+        editMovie(movie).then(() => navigate("/movie"));
 
     }
 
