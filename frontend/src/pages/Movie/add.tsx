@@ -6,6 +6,7 @@ import * as React from "react";
 export default function Add() {
     const [formData, setFormData] = useState<Movie>({id: "", title: "", genre: ""});
     const [isSaved, setIsSaved] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({...formData, [e.target.name]: e.target.value });
@@ -13,10 +14,11 @@ export default function Add() {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        alert(`Form submitted:\nTitle: ${formData?.title}\nGenre: ${formData?.genre}`);
+        setLoading(true);
         setFormData({ id: "", title: "", genre: "" });
          addMovie(formData).then((result) => {
              setIsSaved(true);
+             setLoading(false);
              console.log("Movie added", result, isSaved);
          })
 
@@ -55,10 +57,16 @@ export default function Add() {
                 </div>
                 <button
                     type="submit"
+                    disabled={loading}
                     className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
                 >
-                    Submit
+                    { loading?  "Saving...":  "Save"}
+
                 </button>
+                {isSaved && (
+                    <p className="bg-green-400 p-3">Movie added successfully!</p>
+                )}
+
             </form>
         </main>
     );
