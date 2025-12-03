@@ -1,5 +1,6 @@
 package com.github.group2.backend.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,6 +11,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+    @Value("${frontend.url}")
+    private String frontendUrl;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) {
@@ -20,7 +23,7 @@ public class SecurityConfig {
                         .anyRequest().permitAll()
                 )
                 .oauth2Login(o -> o.
-                        defaultSuccessUrl("http://localhost:5173"))
+                        defaultSuccessUrl(frontendUrl))
 
                 .logout(logout -> logout
                 .logoutUrl("/api/logout")
@@ -29,7 +32,7 @@ public class SecurityConfig {
                 .deleteCookies("JSESSIONID")
                         // IMPORTANT: override default spring logout redirect
                         .logoutSuccessHandler((request, response, authentication) -> {
-                            response.sendRedirect("http://localhost:5173");
+                            response.sendRedirect(frontendUrl);
                         })
         );
         return http.build();
