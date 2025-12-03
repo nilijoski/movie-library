@@ -12,25 +12,26 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(a -> a
                         .requestMatchers("/api/movies").authenticated()
                         .anyRequest().permitAll()
                 )
-                .oauth2Login(o -> o.defaultSuccessUrl("http://localhost:5173"))
-                .logout(logout -> logout
-                        .logoutUrl("/api/logout")
-                        .invalidateHttpSession(true)
-                        .clearAuthentication(true)
-                        .deleteCookies("JSESSIONID")
-                        .logoutSuccessHandler((request, response, authentication) ->
-                                response.sendRedirect("http://localhost:5173")
-                        )
-                );
+                .oauth2Login(o -> o.
+                        defaultSuccessUrl("http://localhost:5173"))
 
+                .logout(logout -> logout
+                .logoutUrl("/api/logout")
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .deleteCookies("JSESSIONID")
+                        // IMPORTANT: override default spring logout redirect
+                        .logoutSuccessHandler((request, response, authentication) -> {
+                            response.sendRedirect("http://localhost:5173");
+                        })
+        );
         return http.build();
     }
-
 }
